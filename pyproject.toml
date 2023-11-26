@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "tango-ai"
+version = "0.1.0"
+description = ""
+authors = ["Varun Swaminathan <85042815+flerovious@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.9.18"
+streamlit = "^1.28.2"
+llama-index = "^0.9.7"
+llama-hub = "^0.0.47.post1"
+python-dotenv = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
