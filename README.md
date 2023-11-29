@@ -2,10 +2,23 @@
 First iteration and public repository of Aspire AI - a program designated to output guiding questions and references to textbooks
 
 # First time Setup
+## Option 1: Pipenv
 Run these command to set up your virtual environment
 ```
 pipenv shell
 pipenv install
+```
+Done! Easy!
+
+## Option 2: Poetry
+1. Install poetry if you don't have it installed already. See https://python-poetry.org/docs/#installing-with-pipx
+2. Install dependencies
+```
+poetry install
+```
+3. Activate the virtual environment
+```
+poetry shell
 ```
 Done! Easy!
 
