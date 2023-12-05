@@ -58,7 +58,6 @@ if st.button("✏️ Generate Guiding Questions"):
     elif not st.session_state[InputField.ANSWER]:
         input_validation.warning("Answer cannot be empty")
     else:
-        st.write("## 📚 Guiding Questions")
         response = tango_engine.query(
             st.session_state[InputField.QUESTION],
             st.session_state[InputField.OPTIONS],
@@ -77,6 +76,8 @@ if st.button("✏️ Generate Guiding Questions"):
         st.session_state[OutputField.CITATIONS] = citations
 
         # Show guiding questions and citations
+        st.write("## 📚 Guiding Questions")
+
         if OutputField.GUIDE in st.session_state:
             st.caption(st.session_state[OutputField.GUIDE])
 
