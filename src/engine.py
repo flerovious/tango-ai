@@ -8,11 +8,12 @@ from llama_index import (
 )
 from llama_index.query_engine import CitationQueryEngine
 from prompt_templates import guidance_prompt_tmpl
+from enums import Expertise
 
 
 class TangoEngine:
-    def __init__(self, expertise):
-        self.expertise = expertise
+    def __init__(self, expertise: Expertise):
+        self.expertise = expertise.value
         self.load_dotenv()
         self.project_root = self.find_project_root() / "src"
         self.data_dir = self.project_root / "data" / self.expertise
