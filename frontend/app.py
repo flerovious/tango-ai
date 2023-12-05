@@ -32,6 +32,7 @@ if "guide" not in st.session_state:
     # replace this with empty string and add guiding questions as they are generated on button click
     st.session_state["guide"] = "Guiding questions will appear here"
 
+input_validation = st.empty()
 col1, col2 = st.columns(2)
 
 with col1:
@@ -39,21 +40,24 @@ with col1:
         "**Question**",
         value=st.session_state["question"],
         placeholder="Enter the full question with possible options",
-    )
+    ).strip()
 
 with col2:
     st.session_state["answer"] = st.text_area(
         "**Answer**",
         value=st.session_state["answer"],
         placeholder="Enter the correct answer",
-    )
+    ).strip()
 
 if st.button("✏️ Generate Guiding Questions"):
-    st.write("## 📚 Guiding Questions")
-    if "guide" in st.session_state:
-        st.caption(st.session_state["guide"])
+    if not st.session_state["question"] or not st.session_state["answer"]:
+        input_validation.warning("Question and answer cannot be empty")
+    else:
+        st.write("## 📚 Guiding Questions")
+        if "guide" in st.session_state:
+            st.caption(st.session_state["guide"])
 
-    # Show citations in accordion
-    with st.expander("See citations"):
-        if "citations" in st.session_state:
-            st.caption(st.session_state["citations"])
+        # Show citations in accordion
+        with st.expander("See citations"):
+            if "citations" in st.session_state:
+                st.caption(st.session_state["citations"])
