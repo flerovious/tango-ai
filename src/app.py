@@ -1,6 +1,7 @@
 import streamlit as st
 from enums import Expertise, InputField, OutputField
 from engine import TangoEngine
+from utils import TANGO_ENGINE_ID, get_expertise_description
 
 st.set_page_config(
     page_title="Tango AI",
@@ -9,8 +10,7 @@ st.set_page_config(
 )
 
 st.sidebar.markdown("### ⚙️ Settings")
-st.sidebar.selectbox("Expertise", [e.value for e in Expertise])
-tango_engine = TangoEngine("chemistry")
+st.sidebar.selectbox("Expertise", [get_expertise_description(e) for e in Expertise])
 
 st.markdown("# 💃 Tango AI")
 st.markdown(
@@ -25,6 +25,9 @@ for field in InputField:
 for field in OutputField:
     if field not in st.session_state:
         st.session_state[field] = ""
+
+if TANGO_ENGINE_ID not in st.session_state:
+    st.session_state[TANGO_ENGINE_ID] = TangoEngine(Expertise.INTRODUCTORY_CHEMISTRY)
 
 input_validation = st.empty()
 col1, col2, col3 = st.columns(3)
@@ -58,7 +61,7 @@ if st.button("✏️ Generate Guiding Questions"):
     elif not st.session_state[InputField.ANSWER]:
         input_validation.warning("Answer cannot be empty")
     else:
-        response = tango_engine.query(
+        response = st.session_state[TANGO_ENGINE_ID].query(
             st.session_state[InputField.QUESTION],
             st.session_state[InputField.OPTIONS],
             st.session_state[InputField.ANSWER],

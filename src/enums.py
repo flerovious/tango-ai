@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class Expertise(Enum):
-    INTRODUCTORY_CHEMISTRY = "Introductory Chemistry 🧪"
+    INTRODUCTORY_CHEMISTRY = "chemistry"
 
 
 class InputField(Enum):
