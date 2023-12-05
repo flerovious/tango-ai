@@ -53,6 +53,6 @@ For support, issues, or contributions, please visit the [GitHub Issues page](htt
 
 ## License
 
-Tango AI is released under the TBD License. See the LICENSE file for more details.
+Tango AI is released under the MIT License. See the LICENSE file for more details.
 
 Tango AI uses chemistry questions from chemPRIME (Moore Et. Al) for demonstration purposes. ChemPRIME is a collaborative project in which concepts and contexts can be contributed by anyone and used free of charge by anyone for non-commercial purposes.
