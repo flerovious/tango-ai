@@ -7,13 +7,14 @@ from llama_index import (
     load_index_from_storage,
 )
 from llama_index.query_engine import CitationQueryEngine
+from prompt_templates import guidance_prompt_tmpl
 
 
 class TangoEngine:
     def __init__(self, expertise):
         self.expertise = expertise
         self.load_dotenv()
-        self.project_root = self.find_project_root() / "backend"
+        self.project_root = self.find_project_root() / "src"
         self.data_dir = self.project_root / "data" / self.expertise
         self.storage_dir = self.project_root / "storage" / self.expertise
         self.index = self.load_or_create_index()
@@ -55,9 +56,13 @@ class TangoEngine:
         return load_index_from_storage(storage_context)
 
     def create_query_engine(self):
-        return CitationQueryEngine.from_args(
+        query_engine = CitationQueryEngine.from_args(
             self.index, similarity_top_k=3, citation_chunk_size=512
         )
+        query_engine.update_prompts(
+            {"response_synthesizer:text_qa_template": guidance_prompt_tmpl}
+        )
+        return query_engine
 
     def query(self, question, options, answer):
         response = self.query_engine.query(
@@ -81,7 +86,7 @@ class TangoEngine:
             print(f"Page {page_label}")
             print(f"File {file_name}")
             print(
-                f"Url https://github.com/gabyang/tango-ai/tree/main/backend/data/14/{file_name.replace(' ', '%20')}"
+                f"Url https://github.com/gabyang/tango-ai/tree/main/src/data/14/{file_name.replace(' ', '%20')}"
             )
 
 

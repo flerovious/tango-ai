@@ -1,5 +1,6 @@
 import streamlit as st
 from enums import Expertise, InputField, OutputField
+from engine import TangoEngine
 
 st.set_page_config(
     page_title="Tango AI",
@@ -9,6 +10,7 @@ st.set_page_config(
 
 st.sidebar.markdown("### ⚙️ Settings")
 st.sidebar.selectbox("Expertise", [e.value for e in Expertise])
+tango_engine = TangoEngine("chemistry")
 
 st.markdown("# 💃 Tango AI")
 st.markdown(
@@ -20,17 +22,9 @@ for field in InputField:
     if field not in st.session_state:
         st.session_state[field] = ""
 
-# uncomment this when citations and guiding questions are generated (work for integrating with backend)
-# for field in OutputField:
-#     if field not in st.session_state:
-#         st.session_state[field] = ""
-
-if OutputField.CITATIONS not in st.session_state:
-    # replace this with empty string and add citations as they are generated on button click
-    st.session_state[OutputField.CITATIONS] = "[1] Citation placeholder"
-if OutputField.GUIDE not in st.session_state:
-    # replace this with empty string and add guiding questions as they are generated on button click
-    st.session_state[OutputField.GUIDE] = "Guiding questions will appear here"
+for field in OutputField:
+    if field not in st.session_state:
+        st.session_state[field] = ""
 
 input_validation = st.empty()
 col1, col2, col3 = st.columns(3)
@@ -65,10 +59,28 @@ if st.button("✏️ Generate Guiding Questions"):
         input_validation.warning("Answer cannot be empty")
     else:
         st.write("## 📚 Guiding Questions")
+        response = tango_engine.query(
+            st.session_state[InputField.QUESTION],
+            st.session_state[InputField.OPTIONS],
+            st.session_state[InputField.ANSWER],
+        )
+
+        guiding_questions = response.response
+        citations = []
+        for i, node in enumerate(response.source_nodes):
+            page_label = node.node.metadata["page_label"]
+            file_name = node.node.metadata["file_name"]
+            citations.append(f"[{i+1}] {file_name} (page {page_label})")
+
+        # Set guiding questions and citations in session state
+        st.session_state[OutputField.GUIDE] = guiding_questions
+        st.session_state[OutputField.CITATIONS] = citations
+
+        # Show guiding questions and citations
         if OutputField.GUIDE in st.session_state:
             st.caption(st.session_state[OutputField.GUIDE])
 
-        # Show citations in accordion
         with st.expander("See citations"):
             if OutputField.CITATIONS in st.session_state:
-                st.caption(st.session_state[OutputField.CITATIONS])
+                for citation in st.session_state[OutputField.CITATIONS]:
+                    st.caption(citation)
