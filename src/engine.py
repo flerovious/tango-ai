@@ -65,7 +65,7 @@ class TangoEngine:
         )
         return query_engine
 
-    def query(self, question, options, answer):
+    def query(self, question, options):
         response = self.query_engine.query(
             f"""
             Question: 
@@ -73,9 +73,6 @@ class TangoEngine:
 
             Options:
             {options}
-
-            Answer:
-            {answer}
             """
         )
         return response
@@ -98,6 +95,5 @@ if __name__ == "__main__":
 B) HCl
 C) HCl0
 D) H2SO4"""
-    answer = "C) HCl0"
-    response = expertise_engine.query(question, options, answer)
+    response = expertise_engine.query(question, options)
     expertise_engine.print_response(response)

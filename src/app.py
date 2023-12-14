@@ -15,9 +15,7 @@ st.sidebar.markdown("### ⚙️ Settings")
 st.sidebar.selectbox("Expertise", [get_expertise_description(e) for e in Expertise])
 
 st.markdown("# 💃 Tango AI")
-st.markdown(
-    "The ultimate teaching planning tool for generating guided questions and answers for your students."
-)
+st.markdown("Personalized teaching tool through effective guiding questions.")
 
 # Initialize session state
 for field in InputField:
@@ -32,7 +30,7 @@ if TANGO_ENGINE_ID not in st.session_state:
     st.session_state[TANGO_ENGINE_ID] = TangoEngine(Expertise.INTRODUCTORY_CHEMISTRY)
 
 input_validation = st.empty()
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
     st.session_state[InputField.QUESTION] = st.text_area(
@@ -48,25 +46,15 @@ with col2:
         placeholder="Enter possible answer options",
     ).strip()
 
-with col3:
-    st.session_state[InputField.ANSWER] = st.text_area(
-        "**Answer**",
-        value=st.session_state[InputField.ANSWER],
-        placeholder="Enter the correct answer",
-    ).strip()
-
 if st.button("✏️ Generate Guiding Questions"):
     if not st.session_state[InputField.QUESTION]:
         input_validation.warning("Question cannot be empty")
     elif not st.session_state[InputField.OPTIONS]:
         input_validation.warning("Answer options cannot be empty")
-    elif not st.session_state[InputField.ANSWER]:
-        input_validation.warning("Answer cannot be empty")
     else:
         response = st.session_state[TANGO_ENGINE_ID].query(
             st.session_state[InputField.QUESTION],
             st.session_state[InputField.OPTIONS],
-            st.session_state[InputField.ANSWER],
         )
 
         guiding_questions = response.response

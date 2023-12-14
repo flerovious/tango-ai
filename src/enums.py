@@ -8,7 +8,6 @@ class Expertise(Enum):
 class InputField(Enum):
     QUESTION = "question"
     OPTIONS = "option"
-    ANSWER = "answer"
 
 
 class OutputField(Enum):

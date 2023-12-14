@@ -26,9 +26,6 @@ B) In the evening
 C) In the afternoon
 D) In the middle of the night
 
-Answer: 
-B) In the evening
-
 Guiding questions:
 1. When will water be wet? Water will be wet when the sky is red [2]
 2. When will the sky be red? The sky is red in the evening [1].
