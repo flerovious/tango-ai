@@ -2,6 +2,8 @@ import streamlit as st
 from enums import Expertise, InputField, OutputField
 from engine import TangoEngine
 from utils import TANGO_ENGINE_ID, get_expertise_description
+from citation import Citation
+from typing import List
 
 st.set_page_config(
     page_title="Tango AI",
@@ -68,11 +70,23 @@ if st.button("✏️ Generate Guiding Questions"):
         )
 
         guiding_questions = response.response
-        citations = []
+        citations: List[Citation] = []
         for i, node in enumerate(response.source_nodes):
             page_label = node.node.metadata["page_label"]
             file_name = node.node.metadata["file_name"]
-            citations.append(f"[{i+1}] {file_name} (page {page_label})")
+            file_path = (
+                "/".join(node.node.metadata["file_path"].split("/")[6:])
+                .replace(" ", "%20")
+                .replace("!", "%21")
+            )
+            citations.append(
+                Citation(
+                    reference_index=i + 1,
+                    page_label=page_label,
+                    file_name=file_name,
+                    url=f"https://github.com/flerovious/tango-ai/blob/main/src/{file_path}",
+                )
+            )
 
         # Set guiding questions and citations in session state
         st.session_state[OutputField.GUIDE] = guiding_questions
@@ -87,4 +101,6 @@ if st.button("✏️ Generate Guiding Questions"):
         with st.expander("See citations"):
             if OutputField.CITATIONS in st.session_state:
                 for citation in st.session_state[OutputField.CITATIONS]:
-                    st.caption(citation)
+                    st.caption(
+                        f"[[{citation.reference_index}] {citation.file_name} (page {citation.page_label})]({citation.url})"
+                    )
